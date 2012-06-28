@@ -1,0 +1,7 @@
+CoffeeScript==1.0.3
+Flask==0.8
+Jinja2==2.6
+PIL==1.1.7
+distribute==0.6.24
+tornado==2.1.1
+numpy==1.6.1
