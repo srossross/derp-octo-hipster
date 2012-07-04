@@ -1,0 +1,214 @@
+/* @group General Styles */
+
+#map_canvas {
+    height: 100%;
+}
+
+html {
+    height: 100%;
+    font-family: arial, sans-serif;
+}
+
+body {
+    height: 100%;
+    background: #FFFFFF;
+    margin: 0px;
+    text-align: left;
+    color: #373737;
+    padding: 0px;
+    font: 0.75em helvetica, arial, sans-serif;
+    letter-spacing: 1px;
+    line-height: 2.0em;
+    padding: 0;
+}
+
+#sidebarContainer {
+    float: left;
+    width: 358px;
+    border-right: 2px solid #555;
+    background: #FFFFFF;
+    margin: 0px;
+    padding: 0;
+    position: relative;
+    text-align: left;
+}
+
+#sidebarContainer #sidebar {
+    text-align: left;
+    padding: 20px;
+    line-height: 1.6em;
+}
+
+#sidebarContainer .sideHeader {
+    padding: 10px 10px 0;
+    margin: 0 -10px;
+    margin-top : 10px;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #0074d8;
+}
+
+#container {
+    height: 100%;
+    margin: 0px auto; /* Right And Left Margin Widths To Auto */
+    text-align: left; /* Hack To Keep IE5 Windows Happy */
+    color: #333333;
+}
+
+.clearer {
+    clear: both;
+}
+
+#contentContainer {
+    height: 100%;
+    padding: 0px;
+    margin: 0px 0px 0px 360px;
+    position: relative;
+    z-index: 10;
+}
+
+#contentContainer #content {
+    padding: 0px;
+    background: #ffffff;
+    border: 0px;
+    height: 100%;
+}
+
+#map_canvas {
+    height: 100%;
+}
+
+div .search {
+    margin-top: 35px;
+    margin-left: 30px;
+    float: left;
+    width: 300px;
+}
+
+#header {
+    height: 100px;
+    background-color: #F1F1F1;
+    background: -webkit-gradient(radial,100 36,0,100 -40,120,from(#FAFAFA),to(#F1F1F1)), #F1F1F1;
+    border-bottom: 2px solid #555;
+}
+
+.logo {
+    float: left;
+    background-image: url('/resources/entought-logo.png');
+    background-size: 60px 60px;
+    width: 60px;
+    height: 60px;
+    margin: 20px;
+}
+
+div.search input[type="text"] {
+    font: 16px arial, sans-serif;
+    height: 25px;
+    padding: 0;
+    vertical-align: top;
+    width: 200px;
+}
+
+.blue_button:active {
+    background-image: none;
+}
+
+.blue_button:active {
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#4787ED),to(#000));
+    background-image: -webkit-linear-gradient(top,#4787ED, #000);
+    background-image: -moz-linear-gradient(top,#4787ED, #000);
+    background-image: -ms-linear-gradient(top,#4787ED, #000);
+    background-image: -o-linear-gradient(top,#4787ED, #000);
+    background-image: linear-gradient(top,#4787ED, #000);
+}
+.blue_button:hover {
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#4787ED),to(#4D90FE));
+    background-image: -webkit-linear-gradient(top,#4787ED, #4D90FE);
+    background-image: -moz-linear-gradient(top,#4787ED, #4D90FE);
+    background-image: -ms-linear-gradient(top,#4787ED, #4D90FE);
+    background-image: -o-linear-gradient(top,#4787ED, #4D90FE);
+    background-image: linear-gradient(top,#4787ED, #4D90FE);
+}
+.blue_button {
+    background-color: #4D90FE;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#4D90FE),to(#4787ED));
+    background-image: -webkit-linear-gradient(top,#4D90FE, #4787ED);
+    background-image: -moz-linear-gradient(top,#4D90FE, #4787ED);
+    background-image: -ms-linear-gradient(top,#4D90FE, #4787ED);
+    background-image: -o-linear-gradient(top,#4D90FE, #4787ED);
+    background-image: linear-gradient(top,#4D90FE, #4787ED);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#4d90fe',EndColorStr='#4787ed');
+    border: 1px solid #3079ED;
+    color: white !important;
+}
+
+.grey_button:active {
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#4787ED),to(#000));
+    background-image: -webkit-linear-gradient(top,#4787ED, #000);
+    background-image: -moz-linear-gradient(top,#4787ED, #000);
+    background-image: -ms-linear-gradient(top,#4787ED, #000);
+    background-image: -o-linear-gradient(top,#4787ED, #000);
+    background-image: linear-gradient(top,#4787ED, #000);
+}
+.grey_button:hover {
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#F1F1F1),to(whiteSmoke));
+    background-image: -webkit-linear-gradient(bottom,#F1F1F1,whiteSmoke);
+    background-image: -moz-linear-gradient(bottom,#F1F1F1,whiteSmoke);
+    background-image: -ms-linear-gradient(bottom,#F1F1F1,whiteSmoke);
+    background-image: -o-linear-gradient(bottom,#F1F1F1,whiteSmoke);
+    background-image: linear-gradient(bottom, #F1F1F1, whiteSmoke);
+}
+.grey_button {
+    background-color: #4D90FE;
+    
+    background-image: -webkit-gradient(linear,left top,left bottom,from(whiteSmoke),to(#F1F1F1));
+    background-image: -webkit-linear-gradient(top,whiteSmoke,#F1F1F1);
+    background-image: -moz-linear-gradient(top,whiteSmoke, #F1F1F1);
+    background-image: -ms-linear-gradient(top,whiteSmoke, #F1F1F1);
+    background-image: -o-linear-gradient(top,whiteSmoke, #F1F1F1);
+    background-image: linear-gradient(top,whiteSmoke, #F1F1F1);
+    border: 1px solid #DADADA;
+}
+
+.smooth_button {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    cursor: default !important;
+    display: inline-block;
+    font-weight: bold;
+    height: 29px;
+    line-height: 29px;
+    min-width: 54px;
+    padding: 0 8px;
+    text-align: center;
+    text-decoration: none !important;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.gbqfi {
+    background: url(//ssl.gstatic.com/gb/images/j_e6a6aca6.png);
+    background-position: -357px 0;
+    display: inline-block;
+    height: 13px;
+    margin: 7px 19px;
+    width: 14px;
+}
+
+span.gear {
+    background: url(//ssl.gstatic.com/ui/v1/icons/mail/sprite_black2.png) no-repeat 0 -21px;
+    height: 21px;
+    width: 21px;
+    display: inline-block;
+    margin: 4px 10px;
+}
+
+
+.ui-state-active{
+    color: black;
+}
+
+
+
+/* @end */
