@@ -1,7 +1,7 @@
 Spine = require('spine')
 
-class AppModel extends Spine.Model
-  @configure 'AppModel'
+class AppState extends Spine.Model
+  @configure 'AppState'
   
   constructor: ->
     super
@@ -9,6 +9,7 @@ class AppModel extends Spine.Model
   validate: ->
     
 
-AppModel.TILE_SIZE = 256
+AppState.TILE_SIZE = 256
+AppState.TILE_SERVER = 'http://localhost:8989'
 
-module.exports = AppModel
+module.exports = AppState

@@ -1,12 +1,19 @@
 $ = JQuery = require('jqueryify')
 AppState = require('models/AppState')
 VectorField = require('lib/vector_field_maptype')
+ParticleSystem = require('lib/particle_system')
 
 OverlayViewCls = new google.maps.OverlayView()
 
 class SurfaceCurrentsOverlayBase
     
 SurfaceCurrentsOverlayBase.prototype = new google.maps.OverlayView()
+
+window.requestAnimFrameDefault = (callback) ->
+    window.setTimeout(callback, 1000 / 60)
+
+window.requestAnimFrame = (callback) ->
+  return (window.requestAnimationFrame  || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.requestAnimFrameDefault)
 
 class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
   constructor: (map) ->
@@ -18,10 +25,12 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
     
     size = AppState.TILE_SIZE
     @vector_field = new VectorField(new google.maps.Size(size, size), 4);
-    console.log('constr', @vector_field, size)
+    
+    @pause = false
+    @stop_animation_ = false
+    
 
   onAdd: ->
-    console.log('onAdd')
     div = document.createElement('div');
     div.style.borderStyle = "none";
     div.style.borderWidth = "0px";
@@ -41,8 +50,6 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
     
     google.maps.event.addListener(this.map_, 'bounds_changed', @bounds_changed)
     
-    console.log('onAdd', @vector_field)
-    console.log('onAdd', @map_.overlayMapTypes)
     @map_.overlayMapTypes.insertAt(0, @vector_field);
     
     return
@@ -108,20 +115,34 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     if !overlayProjection
         return
-
-    swp = overlayProjection.fromLatLngToDivPixel(bnds.getSouthWest())
-    nep = overlayProjection.fromLatLngToDivPixel(bnds.getNorthEast())
-
-    width = $(@map_.getDiv()).width()
-    height = $(@map_.getDiv()).height()
+    
+    sw = bnds.getSouthWest()
+    ne = bnds.getNorthEast()
+    
+    swp = overlayProjection.fromLatLngToDivPixel(sw)
+    nep = overlayProjection.fromLatLngToDivPixel(ne)
 
     context = @canvs_.getContext('2d');
     context.clearRect(0, 0, @canvs_.width, @canvs_.height);
     
+    @particle_system = new ParticleSystem(100, AppState.TILE_SIZE, @map_.getZoom(), overlayProjection, @vector_field, sw, ne)
     
   start_animation: ->
+    @stop_animation_ = false 
+    window.requestAnimFrame(@animate)
     
   stop_animation: ->
+    @stop_animation_ = true
+    
+  animate: =>
+    if @stop_animation
+      return
+      
+    if !@pause && @particle_system
+      @particle_system.step()
+      @particle_system.render(@canvs_)
+       
+    window.requestAnimFrame(@animate)
     
 
 module.exports = SurfaceCurrentsOverlay

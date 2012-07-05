@@ -1,22 +1,19 @@
 $ = JQuery = require('jqueryify')
-
-TILE_SERVER = 'http://localhost:8989'
+AppState = require('models/AppState')
 
 class VectorField extends Spine.Module
   @extend(Spine.Events)
 
   constructor: (tileSize, sub_sample=1) ->
-    console.log("VectorField")
     @tileSize = tileSize
     @sub_sample = sub_sample
     @maxZoom = 19
     @minZoom = 1
     @name = 'oceanSurfaceCurrents'
     @name = 'ocean surface currents'
-
+    @tiles_ = {}
 
   getTile: (coord, zoom, ownerDocument) ->
-    console.log('getTile', coord.toString(), zoom.toString())
     VectorField.trigger('loading', coord, zoom)
     
     div = ownerDocument.createElement('div');
@@ -40,11 +37,9 @@ class VectorField extends Spine.Module
 
     field_size = this.tileSize.height / this.sub_sample
 
-    $.getJSON(TILE_SERVER + '/tile/surrface_current.json', args, (data) ->
-
-        u_arr = data.u
-        v_arr = data.v
-
+    url = AppState.TILE_SERVER + '/tile/surrface_current.json'
+    $.getJSON(url, args, (data) =>
+        @tiles_[[zoom, coord]] = data
         VectorField.trigger('loaded', coord, zoom)
     )
 
@@ -54,6 +49,7 @@ class VectorField extends Spine.Module
   releaseTile: (tile) ->
     data = $.data(tile, 'tile')
     VectorField.trigger('unload', data.coord, data.zoom)
+    @tiles_[[data.coord, data.zoom]] = null
 
 module.exports = VectorField;
 
