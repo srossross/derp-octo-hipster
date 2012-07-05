@@ -13,9 +13,31 @@ class VectorField extends Spine.Module
     @name = 'ocean surface currents'
     @tiles_ = {}
 
+
+    @is_ready = false
+
+    #console.log(JQuery)
+
+    url = AppState.TILE_SERVER + '/tile/ready.json'
+
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      data: {},
+      success:  =>
+        VectorField.trigger('ready')
+        @is_ready = true
+      error: =>
+        @is_ready = false
+        VectorField.trigger('error')
+
+    })
+
+
   getTile: (coord, zoom, ownerDocument) ->
+
     VectorField.trigger('loading', coord, zoom)
-    
+
     div = ownerDocument.createElement('div');
     div.innerHTML = coord;
     div.style.width = this.tileSize.width + 'px';
@@ -28,7 +50,7 @@ class VectorField extends Spine.Module
     tile_size_ = this.tileSize.height
     field_size = this.tileSize.height / this.sub_sample
 
-    args = 
+    args =
         x : coord.x
         y : coord.y
         zoom : zoom,
@@ -38,14 +60,17 @@ class VectorField extends Spine.Module
     field_size = this.tileSize.height / this.sub_sample
 
     url = AppState.TILE_SERVER + '/tile/surrface_current.json'
-    $.getJSON(url, args, (data) =>
-        @tiles_[[zoom, coord]] = data
-        VectorField.trigger('loaded', coord, zoom)
-    )
+
+    if @is_ready
+
+      $.getJSON(url, args, (data) =>
+          @tiles_[[zoom, coord]] = data
+          VectorField.trigger('loaded', coord, zoom)
+      )
 
     $.data(div, 'tile', {zoom:zoom, coord:coord})
     return div
-    
+
   releaseTile: (tile) ->
     data = $.data(tile, 'tile')
     VectorField.trigger('unload', data.coord, data.zoom)

@@ -1,12 +1,12 @@
 $ = JQuery = require('jqueryify')
 AppState = require('models/AppState')
-VectorField = require('lib/vector_field_maptype')
+VectorField = require('lib/map_types/vector_field')
 ParticleSystem = require('lib/particle_system')
 
 OverlayViewCls = new google.maps.OverlayView()
 
 class SurfaceCurrentsOverlayBase
-    
+
 SurfaceCurrentsOverlayBase.prototype = new google.maps.OverlayView()
 
 window.requestAnimFrameDefault = (callback) ->
@@ -22,13 +22,13 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
     @div_ = null;
 
     this.bounds_changed();
-    
+
     size = AppState.TILE_SIZE
     @vector_field = new VectorField(new google.maps.Size(size, size), 4);
-    
+
     @pause = false
     @stop_animation_ = false
-    
+
 
   onAdd: ->
     div = document.createElement('div');
@@ -47,11 +47,11 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
     # We'll add this overlay to the overlayImage pane.
     panes = @getPanes()
     panes.overlayImage.appendChild(div)
-    
+
     google.maps.event.addListener(this.map_, 'bounds_changed', @bounds_changed)
-    
+
     @map_.overlayMapTypes.insertAt(0, @vector_field);
-    
+
     return
 
   onRemove: ->
@@ -65,7 +65,7 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
       if overlays.getAt(i) is @vector_field
          overlays.removeAt(i)
          break
-    
+
 
   draw: ->
     overlayProjection = @getProjection()
@@ -84,7 +84,7 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     @div_.style.width = width + 'px';
     @div_.style.height = height + 'px';
-    
+
     @canvs_.width = width;
     @canvs_.height = height;
 
@@ -92,12 +92,12 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     if !context
         alert("This browser does not support html5 canvas")
-    
+
     context.clearRect(0, 0, this.canvs_.width, this.canvs_.height)
 
-  bounds_changed: =>      
+  bounds_changed: =>
     bnds = @map_.getBounds()
-    
+
     if bnds is undefined
         return
 
@@ -115,36 +115,47 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     if !overlayProjection
         return
-    
+
     sw = bnds.getSouthWest()
     ne = bnds.getNorthEast()
-    
+
     swp = overlayProjection.fromLatLngToDivPixel(sw)
     nep = overlayProjection.fromLatLngToDivPixel(ne)
 
     context = @canvs_.getContext('2d');
     context.clearRect(0, 0, @canvs_.width, @canvs_.height);
-    
+
     @particle_system = new ParticleSystem(100, AppState.TILE_SIZE, @map_.getZoom(), overlayProjection, @vector_field, sw, ne)
-    
+
   start_animation: ->
-    @stop_animation_ = false 
+    @stop_animation_ = false
     window.requestAnimFrame(@animate)
-    
+
   stop_animation: ->
     @stop_animation_ = true
-    
+
   animate: =>
     if @stop_animation
       return
-      
+
     if !@pause && @particle_system
       @particle_system.step()
       @particle_system.render(@canvs_)
-       
+
     window.requestAnimFrame(@animate)
-    
+
+  fade: (context) ->
+    imageData = context.getImageData(0, 0, @canvs_.width, @canvs_.height)
+    data = imageData.data
+
+    for i in [0..data.length]
+      if data[i + 3] > 3
+        data[i + 3] -= 3
+      else
+        data[i + 3] = 0
+
+    context.putImageData(imageData, 0, 0)
+
 
 module.exports = SurfaceCurrentsOverlay
 
-    

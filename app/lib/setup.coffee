@@ -8,4 +8,4 @@ require('spine/lib/ajax')
 require('spine/lib/manager')
 require('spine/lib/route')
 
-require('lib/app_style')
+require('lib/styling/app')
