@@ -7,9 +7,10 @@
         "es5-shimify": "~0.0.1",
         "json2ify": "~0.0.1",
         "jqueryify": "~0.0.1",
-        "spine": "~1.0.7"
+        "spine": "~1.0.7",
+        "stylus": "~0.27.2"
     },
-    
+
     "engines": {
         "node": "0.6.x"
     }

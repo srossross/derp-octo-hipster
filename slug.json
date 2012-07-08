@@ -1,13 +1,19 @@
 {
   "dependencies": [
-    "es5-shimify", 
-    "json2ify", 
-    "jqueryify", 
+    "es5-shimify",
+    "json2ify",
+    "jqueryify",
     "spine",
     "spine/lib/local",
     "spine/lib/ajax",
     "spine/lib/route",
     "spine/lib/manager"
   ],
-  "libs": []
+  "libs": [],
+
+  "main": "./app/index",
+
+  "css": "./css/index",
+
+  "public": "./public"
 }

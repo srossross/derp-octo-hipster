@@ -3,75 +3,28 @@
     <head>
         <meta charset=utf-8>
         <title>Surface Currents</title>
-        <!--         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> -->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/flick/jquery-ui.css" type="text/css" charset="utf-8">
 
         <link rel="stylesheet" href="/application.css" type="text/css" charset="utf-8">
 
-        <link rel="stylesheet" href="/static/flow.css" type="text/css" charset="utf-8">
-
         <script src="/application.js" type="text/javascript" charset="utf-8"></script>
+
         <script type="text/javascript" charset="utf-8">
             var jQuery = require("jqueryify");
             require("lib/jquery-ui.min");
 
+            AppState = require('models/AppState');
+
             var exports = this;
-            console.log('JQuery.ajaxError', jQuery.ajaxError);
             jQuery(function() {
+                var AppStyler = require("lib/styling/app");
                 var FlowApp = require("index");
+
+                exports.styler = new AppStyler();
                 exports.app = new FlowApp({
                     el : $("body")
                 });
-
-                console.log('JQuery.ajaxError', $.ajaxError)
-
-
-                $('#go_search').button({
-                    icons: { primary: "ui-icon-search"},
-                    text: false
-                    }).click(function (){
-                        exports.app.place_changed();
-                        })
-
-                $('#load_error').button({text: false}).click(function (){
-                    $( "#error-dialog-message" ).dialog('open');
-                    })
-
-                $('#settings').button({text: false, icons: { primary: "ui-icon-gear"},}).click(function (){
-                    $( "#settings-dialog-message" ).dialog('open');
-                    })
-
-                $( "#error-dialog-message" ).dialog({
-        			modal: true,
-                    autoOpen: false,
-                    resizable: false,
-                    draggable: false,
-                    title: "Loading Surface Currents",
-                    width: 600,
-                    dialogClass: "alert",
-        			buttons: {
-        				Ok: function() {
-        					$( this ).dialog( "close" );
-        				}
-        			}
-        		});
-
-                $( "#settings-dialog-message" ).dialog({
-        			modal: true,
-                    autoOpen: false,
-                    resizable: false,
-                    draggable: false,
-                    title: "Application Settings",
-        			buttons: {
-        				Ok: function() {
-        					$( this ).dialog( "close" );
-        				},
-        				Cancel: function() {
-        					$( this ).dialog( "close" );
-        				}
-        			}
-        		});
 
             });
 
@@ -83,29 +36,28 @@
 
     </head>
     <body id="index">
-        <div id="header">
+        <div class="header">
             <div class="logo"></div>
 
-            <div class='search'>
-                <input type="text"/>
-                <div id="go_search"></div>
+            <div class='lbar'>
+                <input type="text" class="search_field"/>
+                <div id="go_search" class="fbutton"></div>
             </div>
 
-            <div class='setting_container'>
-                <div id="settings"></div>
+            <div class='rbar'>
+                <p>Welcome | <a href="#">log in</a> | <a href="#">sign up</a> | <a id='settings_' href="#">settings</a> | </p>
+                <img src="http://www.gravatar.com/avatar?size=38" class="avatar fbutton" alt="gravatar"></img>
             </div>
 
             <div class='clearer'></div>
         </div>
 
-        <div id="container">
+        <div class="container">
 
-            <div id="sidebarContainer">
-                <div class="clearer"></div>
-                <div id="sidebar">
-                    <h1 class="sideHeader"> Surface Currents </h1>
-                    <div class='clearer'></div>
-                    <hr/>
+            <div class="sidebar">
+                <h1> Surface Currents </h1>
+                <hr/>
+                <div class='entry'>
                     this is the content.
                     <br/>
                     <input type="checkbox" checked="true" class="toggle_controls"/>
@@ -116,37 +68,28 @@
                     <br/>
                     Choose Date:
                     <input type="text" id="datepicker">
-                    <br/>
-                    <div id="prg" class="ui-state-highlight ui-corner-all">
-                        <div class='left'>Loading Surface Currents</div> <span id='load_error' class='right ui-icon ui-icon-alert'></span>
-                        <div class='cearer'></div>
-                        <progress id="sc_progress" value=0 max=0></progress>
-                    </div>
+                </div>
+                <div id="prg" class="ui-state-highlight ui-corner-all">
+                    <p>Loading Surface Currents</p> <span class='load_info right ui-icon ui-icon-alert'></span>
+                    <div class='cearer'></div>
+                    <progress id="sc_progress" value=0 max=0></progress>
+                </div>
 
-                    <h1 class="sideHeader"> Downloads </h1>
-                    <hr/>
-
-                    <a href='#'>Surfate Currents</a>
-                    <br/>
-                    <a href='#'>Trajectory</a>
-                    <br/>
-
-                    <a class='btn' >This is a button</a>
-                    <button id="create-user">
-                        Create new user
-                    </button>
+                <h1> Downloads </h1>
+                <hr/>
+                <div class='entry'>
+                <a href='#'>Surfate Currents</a>
+                <br/>
+                <a href='#'>Trajectory</a>
                 </div>
             </div>
 
-            <div id="contentContainer">
+            <div class="content">
                 <!-- Start main content wrapper -->
-                <div id="content">
                     <div id="map_canvas">
                         Map Content
                     </div>
                     <div class="clearer"></div>
-                </div>
-
             </div>
         </div>
 

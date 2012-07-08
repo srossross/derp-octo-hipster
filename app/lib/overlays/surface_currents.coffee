@@ -13,7 +13,12 @@ window.requestAnimFrameDefault = (callback) ->
     window.setTimeout(callback, 1000 / 60)
 
 window.requestAnimFrame = (callback) ->
-  return (window.requestAnimationFrame  || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.requestAnimFrameDefault)
+  timeout = (window.requestAnimationFrame  || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+             window.msRequestAnimationFrame || window.requestAnimFrameDefault)
+
+  #window.setTimeout(callback, 100)
+  return timeout(callback)
+
 
 class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
   constructor: (map) ->
@@ -21,14 +26,13 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     @div_ = null;
 
-    this.bounds_changed();
 
     size = AppState.TILE_SIZE
     @vector_field = new VectorField(new google.maps.Size(size, size), 4);
 
     @pause = false
     @stop_animation_ = false
-
+    @f_count=0
 
   onAdd: ->
     div = document.createElement('div');
@@ -52,6 +56,7 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     @map_.overlayMapTypes.insertAt(0, @vector_field);
 
+    this.bounds_changed();
     return
 
   onRemove: ->
@@ -65,7 +70,6 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
       if overlays.getAt(i) is @vector_field
          overlays.removeAt(i)
          break
-
 
   draw: ->
     overlayProjection = @getProjection()
@@ -125,7 +129,8 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
     context = @canvs_.getContext('2d');
     context.clearRect(0, 0, @canvs_.width, @canvs_.height);
 
-    @particle_system = new ParticleSystem(100, AppState.TILE_SIZE, @map_.getZoom(), overlayProjection, @vector_field, sw, ne)
+    state = AppState.first()
+    @particle_system = new ParticleSystem(state.max_particles, AppState.TILE_SIZE, @map_.getZoom(), overlayProjection, @vector_field, sw, ne)
 
   start_animation: ->
     @stop_animation_ = false
@@ -135,11 +140,12 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
     @stop_animation_ = true
 
   animate: =>
-    if @stop_animation
+    if @stop_animation_
       return
 
     if !@pause && @particle_system
       @particle_system.step()
+      @fade3()
       @particle_system.render(@canvs_)
 
     window.requestAnimFrame(@animate)
@@ -156,6 +162,30 @@ class SurfaceCurrentsOverlay extends SurfaceCurrentsOverlayBase
 
     context.putImageData(imageData, 0, 0)
 
+  fade3: ->
+      @f_count += 1
+
+      if @f_count == 4
+          @f_count = 0
+          context = @canvs_.getContext('2d')
+          #context.globalAlpha = .99
+          context.globalCompositeOperation = 'source-atop'
+
+          context.fillStyle = 'rgba(166, 191, 221, .1)'
+          context.fillRect(0, 0, @canvs_.width, @canvs_.height)
+
+          #context.globalAlpha = 1
+          context.globalCompositeOperation = 'source-over'
+
+  fade2: ->
+    dataURL = @canvs_.toDataURL()
+    img = new Image()
+    img.onload = =>
+        context = @canvs_.getContext('2d')
+        context.globalAlpha = .9
+        context.drawImage(img,0,0)
+        context.globalAlpha = 1
+    img.src = dataURL
 
 module.exports = SurfaceCurrentsOverlay
 

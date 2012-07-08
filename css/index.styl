@@ -1,1 +1,189 @@
 @import './mixin'
+
+/* @group General Styles */
+
+html
+    height 100%
+    font-family arial
+    color grey
+
+a
+    font-weight bold
+
+a:visited
+    color: #4A6B82;
+
+a
+    color #07C
+    text-decoration none
+    cursor pointer
+
+body {
+    height: 100%;
+    background: white;
+    margin: 0px;
+    text-align: left;
+    padding: 0px;
+    letter-spacing: 1px;
+    line-height: 2.0em;
+    padding: 0;
+}
+
+.container {
+    height: 100%;
+    margin: 0px auto; /* Right And Left Margin Widths To Auto */
+}
+
+.container .sidebar {
+    float: left;
+    width: 358px;
+    border-right: 2px solid #555;
+    background: #FFFFFF;
+    margin: 0px;
+    padding: 0;
+    position: relative;
+    text-align: left;
+    color #4D4D4D
+}
+
+.container .sidebar {
+    text-align: left;
+    padding: 0px;
+    line-height: 1.6em;
+}
+
+.sidebar h1
+    margin: 10px;
+    color: #0074d8;
+    font-size 140%
+
+.sidebar div
+    margin 10px
+
+.clearer {
+    clear: both;
+}
+
+.container .content
+    height: 100%;
+    padding: 0px;
+    margin: 0px 0px 0px 360px;
+    position: relative;
+    background: #ffffff;
+    border: 0px;
+
+
+#map_canvas {
+    height: 100%;
+}
+
+
+header_height = 70px
+bheight = 36px
+
+header_border = 1px solid #020202
+
+.header {
+    height: header_height
+    vbg-gradient(#F5F3F3, #E4E4E4);
+    border-bottom: header_border;
+}
+
+.fbutton
+    width: 50px;
+    height bheight
+
+.logo
+    float left
+    background-image url('/resources/entought-logo.png')
+    width 60px
+    height 60px
+    background-size @width @height
+    margin (header_height/2 - 30px)
+    margin-left 20px
+
+.header .lbar
+    margin-top (header_height/2 - bheight/2)
+    margin-left 20px
+    float left
+
+.header .lbar .search_field
+    float left
+    margin-left 10px
+    width 500px
+    height bheight - 9px
+    margin-top 3px
+    font-size 20px
+
+.header .lbar .fbutton
+    float right
+    margin-left 10px
+
+.ui-icon-gear-custom
+    background: url(//ssl.gstatic.com/ui/v1/icons/mail/sprite_black2.png) no-repeat 0px -21px
+    height: 21px
+    width: 21px
+
+
+.header .rbar
+    margin-top (header_height/2 - bheight/2)
+    margin-right: 30px;
+    float:right;
+
+.header .rbar p
+    float left
+    margin 5px
+    margin-right 20px
+
+.header .rbar .avatar
+    float right
+    margin-right 20px
+    width 36px
+
+.header .rbar .fbutton
+    float right
+    margin-right 20px
+
+
+div .setting_container {
+    margin-top: 35px;
+    margin-right: 40px;
+    float: right;
+}
+
+
+
+#prg {
+    padding: 10px;
+}
+
+#prg p
+    float left
+    margin 0
+
+#prg .load_info
+    float right
+    margin 2px
+
+#prg progress{
+    width: 100%;
+}
+
+div.search input[type="text"] {
+    font: 16px arial, sans-serif;
+    height: 25px;
+    padding: 0;
+    vertical-align: top;
+    width: 200px;
+}
+
+.ui-widget-overlay {
+    opacity: .80;
+    filter: Alpha(Opacity=80);
+}
+
+.ui-datepicker
+    font-size 0.75em
+    line-height 1em
+
+/* @end */
