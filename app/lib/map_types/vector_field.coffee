@@ -16,12 +16,15 @@ class VectorField extends Spine.Module
         @tiles_ = {}
         @max_velocity = -1
 
+        @queue = []
+        @timeout_id = null
+
 
         @is_ready = false
 
-        url = AppState.TILE_SERVER + '/tile/ready.json'
+        url = AppState.TILE_SERVER + '/ready.json'
 
-        $.ajax({
+        response = $.ajax({
             url: url,
             dataType: 'json',
             data: {},
@@ -30,7 +33,7 @@ class VectorField extends Spine.Module
                 @is_ready = true
             error: =>
                 @is_ready = false
-                VectorField.trigger('error')
+                VectorField.trigger('error', response)
         })
 
 
@@ -38,14 +41,17 @@ class VectorField extends Spine.Module
 
         VectorField.trigger('loading', coord, zoom)
 
-        div = ownerDocument.createElement('div');
-        div.innerHTML = coord;
-        div.style.width = this.tileSize.width + 'px';
-        div.style.height = this.tileSize.height + 'px';
-        div.style.fontSize = '10';
-        div.style.borderStyle = 'solid';
-        div.style.borderWidth = '1px';
-        div.style.borderColor = '#AAAAAA';
+        state = AppState.first()
+
+        if state.debug
+            div = ownerDocument.createElement('div');
+            div.style.width = this.tileSize.width + 'px';
+            div.style.height = this.tileSize.height + 'px';
+            div.innerHTML = coord;
+            div.style.fontSize = '10';
+            div.style.borderStyle = 'solid';
+            div.style.borderWidth = '1px';
+            div.style.borderColor = '#AAAAAA';
 
         tile_size_ = this.tileSize.height
         field_size = this.tileSize.height / this.sub_sample
@@ -59,9 +65,10 @@ class VectorField extends Spine.Module
 
         field_size = this.tileSize.height / this.sub_sample
 
-        url = AppState.TILE_SERVER + '/tile/surrface_current.json'
+        url = AppState.TILE_SERVER + '/tile.json'
 
         if @is_ready
+            @queue.push([coord.x, coord.y, zoom])
 
             $.getJSON(url, args, (data) =>
                 unless @tiles_[zoom]
@@ -93,6 +100,10 @@ class VectorField extends Spine.Module
         unless @tiles_[data.zoom]
             return
 
+        unless idx == -1
+            @queue.splice(idx, 1)
+            #console.log('pop', @queue.toString())
+
         @tiles_[data.zoom][[data.coord.x, data.coord.y]] = null
 
     get: (zoom, world_coords) ->
@@ -102,8 +113,8 @@ class VectorField extends Spine.Module
             return new google.maps.Point(0,0)
         ntiles = 1 << zoom
 
-        pixel_x = world_coords.x
-        pixel_y = world_coords.y
+        pixel_x = world_coords.x * ntiles
+        pixel_y = world_coords.y * ntiles
 
         tile_x =  Math.floor(pixel_x / tile_size_)
         tile_y =  Math.floor(pixel_y / tile_size_)

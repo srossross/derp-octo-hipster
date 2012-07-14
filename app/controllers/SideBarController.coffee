@@ -1,11 +1,3 @@
-###
-
-## My Titile
-This is the main doc for the flow app
-
-###
-require('lib/setup')
-
 $ = JQuery = require('jqueryify')
 
 Spine = require('spine')
@@ -14,16 +6,15 @@ Overlay = require('lib/overlays/surface_currents')
 VectorField = require('lib/map_types/vector_field')
 SimpleMap = require('lib/map_types/styled_map')
 
-ServerInfo = require('controllers/ServerInfo')
-Settings = require('controllers/Settings')
-
-class FlowApp extends Spine.Controller
+class SideBarController extends Spine.Controller
 
     events:
         "change  .toggle_controls": "toggle_controls"
         "change  .toggle_overlay": "show_overlay_changed"
-        "click  #open_settings": "open_settings"
+        "click  #settings_": "open_settings"
         "click  #go_search": "place_changed"
+        "click  .load_info": "open_info_dialog"
+
 
     elements:
         "#map_canvas":     "map_canvas"
@@ -31,11 +22,13 @@ class FlowApp extends Spine.Controller
         "input[type='checkbox'].toggle_controls":     "control_checkbox"
         "input[type='checkbox'].toggle_overlay":     "overlay_checkbox"
         "#sc_progress":     "sc_progress"
+        "#prg":     "progress_div"
         "#settings" : "settings"
 
     constructor: ->
         super
 
+        AppState.bind 'refresh', @state_loaded
         AppState.bind 'refresh', @state_loaded
 
         center = new google.maps.LatLng(24.5, -89.5);
@@ -82,10 +75,6 @@ class FlowApp extends Spine.Controller
 
         @el.unload @save_state
         AppState.fetch()
-
-        @server_info = new ServerInfo(el:"#prg")
-        @settings = new Settings(el:"#settings-dialog")
-        @log(@settings)
 
     state_loaded: =>
         @state = AppState.first()
@@ -134,6 +123,11 @@ class FlowApp extends Spine.Controller
                 @sc_progress.attr('max', 0)
             )
 
+        VectorField.bind('error', =>
+            $('#prg').addClass('ui-state-error')
+            )
+
+        $('#prg:visible').hide()
 
     show_overlay_changed: (event) ->
 
@@ -176,11 +170,11 @@ class FlowApp extends Spine.Controller
         else
             @map.setCenter(place.geometry.location)
 
-    open_settings: =>
-        @settings.open()
+    open_settings: ->
+        $( "#settings-dialog-message" ).dialog('open');
 
+    open_info_dialog: ->
+        console.log("error-dialog-message")
+        $( "#error-dialog-message" ).dialog('open')
 
-
-module.exports = FlowApp
-module.exports.AppState = AppState
-
+module.exports = SideBarController

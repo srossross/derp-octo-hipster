@@ -16,7 +16,6 @@ class AppStyler extends Spine.Controller
     @resize()
     $(window).resize(@resize);
 
-    console.log(@buttons)
     @buttons.button()
 
     $("#datepicker").datepicker(
@@ -31,26 +30,9 @@ class AppStyler extends Spine.Controller
         text: false
         )
 
-    $( "#error-dialog-message" ).dialog({
-      modal: true
-      autoOpen: false
-      resizable: false
-      draggable: false
-      title: "Loading Surface Currents"
-      width: 600
-      dialogClass: "alert"
-      })
-
-
     buttons_ =
         Ok: -> $( this ).dialog( "close" ),
         Cancel: -> $( this ).dialog( "close" )
-
-    $("#settings-dialog-message").dialog({ modal: true, autoOpen: false, resizable: false, draggable: false, title: "Application Settings", buttons_ : buttons_    })
-
-
-    $('.load_info').button({text: false})
-    $('#settings').button({text: true, icons: { primary: "ui-icon-gear-custom"}})
 
   resize: =>
     hh1 = @header.height()

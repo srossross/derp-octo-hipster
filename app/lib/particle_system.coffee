@@ -19,11 +19,8 @@ class ParticleSystem
         @vector_field = vector_field
         @particles = new Array(max_particles)
 
-        console.log("sw", sw.toString())
-        console.log("ne", ne.toString())
-
-        @bottom_right = @merc.fromLatLngToPixel(sw)
-        @top_left = @merc.fromLatLngToPixel(ne)
+        @bottom_right = @merc.fromLatLngToPoint(sw)
+        @top_left = @merc.fromLatLngToPoint(ne)
 
         for i in [0..max_particles-1]
             @particles[i] = @new_particle()
@@ -36,7 +33,6 @@ class ParticleSystem
         return new Particle(loc)
 
     step: ->
-        console.log("step")
 
         ntiles = 1<<@zoom
         for i in [0..@max_particles-1]
@@ -47,28 +43,28 @@ class ParticleSystem
 
             new_velocity = @vector_field.get(@zoom, particle.loc)
             particle.old_loc = particle.loc
-            particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x*2*ntiles, particle.loc.y + new_velocity.y*2*ntiles)
+            #particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x*2*ntiles, particle.loc.y + new_velocity.y*2*ntiles)
+            particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x/ ntiles * 20,
+                                                 particle.loc.y + new_velocity.y/ ntiles * 20)
             particle.vel = new_velocity.md()
             particle.life-=1
 
     render: (canvas) ->
         context = canvas.getContext('2d')
 
-        context.lineWidth = 2
+        context.lineWidth = .5
 
+        ntiles = 1 << @zoom
         for i in [0..@max_particles-1]
             particle = @particles[i]
+            if particle.vel < .00001
+                continue
 
-            start_x = particle.old_loc.x - @top_left.x
-            start_y = particle.old_loc.y - @top_left.y
+            start_x = (particle.old_loc.x - @bottom_right.x) * ntiles
+            start_y = (particle.old_loc.y - @top_left.y) * ntiles
 
-            end_x = particle.loc.x - @top_left.x
-            end_y = particle.loc.y - @top_left.y
-
-            #geo = @merc.fromPointToLatLng(particle.old_loc)
-            #pix_ini = @overlay_proj.fromLatLngToContainerPixel(geo)
-            #geo = @merc.fromPointToLatLng(particle.loc)
-            #pix = @overlay_proj.fromLatLngToContainerPixel(geo)
+            end_x = (particle.loc.x - @bottom_right.x) * ntiles
+            end_y = (particle.loc.y - @top_left.y) * ntiles
 
             #x = particle.vel/(@vector_field.max_velocity*.9)
             #r = Math.round(x * 89 + 166)

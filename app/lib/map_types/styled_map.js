@@ -1,7 +1,7 @@
 var styles = [{
     featureType : "landscape",
     stylers : [{
-        color : "#808080"
+        color : "#393A26"
     }]
 }, {
     featureType : "administrative",
@@ -40,4 +40,4 @@ var SimpleMap = new google.maps.StyledMapType(styles, {
 
 SimpleMap.ID = "Simple";
 
-module.exports = SimpleMap; 
+module.exports = SimpleMap;

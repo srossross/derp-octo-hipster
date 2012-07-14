@@ -28,10 +28,7 @@
 
             });
 
-
-
-
-        </script>
+</script>
 
 
     </head>
@@ -45,7 +42,7 @@
             </div>
 
             <div class='rbar'>
-                <p>Welcome | <a href="#">log in</a> | <a href="#">sign up</a> | <a id='settings_' href="#">settings</a> | </p>
+                <p>Welcome | <a href="/login.html">log in</a> | <a href="/login.html">sign up</a> | <a id='open_settings'>settings</a> | </p>
                 <img src="http://www.gravatar.com/avatar?size=38" class="avatar fbutton" alt="gravatar"></img>
             </div>
 
@@ -70,9 +67,11 @@
                     <input type="text" id="datepicker">
                 </div>
                 <div id="prg" class="ui-state-highlight ui-corner-all">
-                    <p>Loading Surface Currents</p> <span class='load_info right ui-icon ui-icon-alert'></span>
+                    <p>Loading Surface Currents</p> <span id="show_info" class='load_info right ui-icon ui-icon-alert'></span>
                     <div class='cearer'></div>
                     <progress id="sc_progress" value=0 max=0></progress>
+
+                    <div class='info_dialog'>Info</div>
                 </div>
 
                 <h1> Downloads </h1>
@@ -93,10 +92,7 @@
             </div>
         </div>
 
-    <div id='error-dialog-message'>
-    This is an error
-    </div>
-    <div id='settings-dialog-message'>
+    <div id='settings-dialog'>
         <form>
             <table style="width: 100%;">
                 <tr>

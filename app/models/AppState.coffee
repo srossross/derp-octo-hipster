@@ -3,12 +3,12 @@ require('spine/lib/local')
 
 class AppState extends Spine.Model
 
-  @configure 'AppState', 'show_ctrls', 'show_currents', 'maptypeid', 'zoom', 'center_lat', 'center_lng', 'max_particles'
+  @configure 'AppState', 'show_ctrls', 'show_currents', 'maptypeid', 'zoom', 'center_lat', 'center_lng', 'max_particles', 'debug'
   @extend Spine.Model.Local
 
   constructor: ->
       super
-      @max_particles = 2000
+      @max_particles = 7000
 
   validate: ->
     return
@@ -16,7 +16,7 @@ class AppState extends Spine.Model
 AppState.bind('error', (mdl, msg) -> alert(msg))
 
 AppState.TILE_SIZE = 256
-AppState.TILE_SERVER = 'http://localhost:8989'
+AppState.TILE_SERVER = 'http://localhost:5000'
 
 module.exports = AppState
 
