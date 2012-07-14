@@ -43,10 +43,11 @@ class VectorField extends Spine.Module
 
         state = AppState.first()
 
+        div = ownerDocument.createElement('div');
+        div.style.width = this.tileSize.width + 'px';
+        div.style.height = this.tileSize.height + 'px';
+
         if state.debug
-            div = ownerDocument.createElement('div');
-            div.style.width = this.tileSize.width + 'px';
-            div.style.height = this.tileSize.height + 'px';
             div.innerHTML = coord;
             div.style.fontSize = '10';
             div.style.borderStyle = 'solid';
@@ -68,7 +69,7 @@ class VectorField extends Spine.Module
         url = AppState.TILE_SERVER + '/tile.json'
 
         if @is_ready
-            @queue.push([coord.x, coord.y, zoom])
+#            @queue.push([coord.x, coord.y, zoom])
 
             $.getJSON(url, args, (data) =>
                 unless @tiles_[zoom]
@@ -100,9 +101,9 @@ class VectorField extends Spine.Module
         unless @tiles_[data.zoom]
             return
 
-        unless idx == -1
-            @queue.splice(idx, 1)
-            #console.log('pop', @queue.toString())
+#        unless idx == -1
+#            @queue.splice(idx, 1)
+#            #console.log('pop', @queue.toString())
 
         @tiles_[data.zoom][[data.coord.x, data.coord.y]] = null
 

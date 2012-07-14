@@ -44,8 +44,8 @@ class ParticleSystem
             new_velocity = @vector_field.get(@zoom, particle.loc)
             particle.old_loc = particle.loc
             #particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x*2*ntiles, particle.loc.y + new_velocity.y*2*ntiles)
-            particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x/ ntiles * 20,
-                                                 particle.loc.y + new_velocity.y/ ntiles * 20)
+            particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x/ ntiles * 30,
+                                                 particle.loc.y + new_velocity.y/ ntiles * 30)
             particle.vel = new_velocity.md()
             particle.life-=1
 
@@ -57,7 +57,7 @@ class ParticleSystem
         ntiles = 1 << @zoom
         for i in [0..@max_particles-1]
             particle = @particles[i]
-            if particle.vel < .00001
+            if particle.vel < .000001
                 continue
 
             start_x = (particle.old_loc.x - @bottom_right.x) * ntiles
