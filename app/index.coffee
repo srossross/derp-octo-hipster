@@ -92,6 +92,9 @@ class FlowApp extends Spine.Controller
 
         unless @state
             @state = new AppState()
+            @state.maptypeid = google.maps.MapTypeId.TERRAIN
+            @state.show_ctrls = true
+            @state.show_currents = true
             @state.save()
 
         @control_checkbox[0].checked = @state.show_ctrls
