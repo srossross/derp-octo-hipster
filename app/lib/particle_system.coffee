@@ -46,7 +46,7 @@ class ParticleSystem
             #particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x*2*ntiles, particle.loc.y + new_velocity.y*2*ntiles)
             particle.loc = new google.maps.Point(particle.loc.x + new_velocity.x/ ntiles * 30,
                                                  particle.loc.y + new_velocity.y/ ntiles * 30)
-            particle.vel = new_velocity.md()
+            particle.vel = Math.sqrt(new_velocity.x*new_velocity.x + new_velocity.y*new_velocity.y)
             particle.life-=1
 
     render: (canvas) ->
